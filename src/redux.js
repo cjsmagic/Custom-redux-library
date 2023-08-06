@@ -18,14 +18,14 @@ function redux() {
 
     function subscribe(cb) {
       subscribers.push(cb);
-      // here we are returning index
       return function () {
+        // we can use better ways to remove cb elements
         subscribers[subscribers.length - 1] = null;
       };
     }
 
     function getValue() {
-      return state;
+      return JSON.parse(JSON.stringify(state));
     }
 
     publish();
