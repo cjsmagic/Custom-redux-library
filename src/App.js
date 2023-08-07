@@ -1,23 +1,23 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React from 'react';
 import './style.css';
-import { createStore } from './redux';
+import { connect } from './react-redux';
 
-const initialState = {
-  count: 0,
-};
+// const initialState = {
+//   count: 0,
+// };
 
-function myReducer(state = initialState, action) {
-  switch (action.type) {
-    case 'add':
-      return { ...state, count: state.count + 1 };
+// function myReducer(state = initialState, action) {
+//   switch (action.type) {
+//     case 'add':
+//       return { ...state, count: state.count + 1 };
 
-    case 'sub':
-      return { ...state, count: state.count - 1 };
+//     case 'sub':
+//       return { ...state, count: state.count - 1 };
 
-    default:
-      return state;
-  }
-}
+//     default:
+//       return state;
+//   }
+// }
 
 // const store = createStore(myReducer);
 
@@ -37,38 +37,64 @@ function myReducer(state = initialState, action) {
 
 // store.dispatch({ type: 'add' });
 
-export default function App() {
-  const [value, setValue] = useState(0);
+// export default function App() {
+//   const [value, setValue] = useState(0);
 
-  const store = useRef(null);
+//   const store = useRef(null);
 
-  useEffect(() => {
-    store.current = createStore(myReducer);
+//   useEffect(() => {
+//     store.current = createStore(myReducer);
 
-    const unsubscribe = store.current.subscribe(() => {
-      const { count } = store.current.getValue();
-      console.log({ count });
-      setValue(count);
+//     const unsubscribe = store.current.subscribe(() => {
+//       const { count } = store.current.getValue();
+//       console.log({ count });
+//       setValue(count);
 
-      if (count === 11) {
-        unsubscribe();
-      }
-    });
-  }, []);
+//       if (count === 11) {
+//         unsubscribe();
+//       }
+//     });
+//   }, []);
 
-  const add = () => {
-    store.current.dispatch({ type: 'add' });
-  };
+//   const add = () => {
+//     store.current.dispatch({ type: 'add' });
+//   };
 
-  const subtract = () => {
-    store.current.dispatch({ type: 'sub' });
-  };
+//   const subtract = () => {
+//     store.current.dispatch({ type: 'sub' });
+//   };
 
+//   return (
+//     <div>
+//       <h1>Count: {value}</h1>
+//       <button onClick={add}>Add</button>
+//       <button onClick={subtract}>Subtract</button>
+//     </div>
+//   );
+// }
+
+// using react redux
+function App(props) {
   return (
     <div>
-      <h1>Count: {value}</h1>
-      <button onClick={add}>Add</button>
-      <button onClick={subtract}>Subtract</button>
+      <h1>Count: {props.count}</h1>
+      <button onClick={props.add}>Add</button>
+      <button onClick={props.subtract}>Subtract</button>
     </div>
   );
 }
+
+const WithConnect = connect(
+  App,
+  (value) => {
+    return { count: value.count };
+  },
+  (dispatch) => {
+    return {
+      add: () => dispatch({ type: 'add' }),
+      subtract: () => dispatch({ type: 'sub' }),
+    };
+  }
+);
+
+export default WithConnect;
