@@ -33,4 +33,28 @@ function connect(Component, mapPropsToState, dispatchConsumers) {
   };
 }
 
-export { Provider, connect };
+function useSelector(mapper = (value) => value) {
+  const store = useContext(Context);
+  const [state, setState] = useState(() => mapper(store.getValue()));
+
+  useEffect(() => {
+    const unsubscribe = store.subscribe(() => {
+      setState(mapper(store.getValue()));
+    });
+
+    return () => {
+      unsubscribe();
+    };
+  }, []);
+
+  return state;
+}
+
+function useDispatch() {
+  const store = useContext(Context);
+  return store.dispatch;
+}
+
+// todo: implement combineReducer
+
+export { Provider, connect, useSelector, useDispatch };

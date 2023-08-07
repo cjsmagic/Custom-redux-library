@@ -1,25 +1,23 @@
-// import React, { StrictMode } from 'react';
-// import { createRoot } from 'react-dom/client';
-// import App from './App';
-// import store from './store';
-// import { Provider } from './react-redux';
+import React, { useState, useEffect, useRef } from 'react';
+import App from './App';
+import { createStore } from './redux';
 
-// const initialState = {
-//   count: 0,
-// };
+const initialState = {
+  count: 0,
+};
 
-// function myReducer(state = initialState, action) {
-//   switch (action.type) {
-//     case 'add':
-//       return { ...state, count: state.count + 1 };
+function myReducer(state = initialState, action) {
+  switch (action.type) {
+    case 'add':
+      return { ...state, count: state.count + 1 };
 
-//     case 'sub':
-//       return { ...state, count: state.count - 1 };
+    case 'sub':
+      return { ...state, count: state.count - 1 };
 
-//     default:
-//       return state;
-//   }
-// }
+    default:
+      return state;
+  }
+}
 
 // const store = createStore(myReducer);
 
@@ -39,38 +37,38 @@
 
 // store.dispatch({ type: 'add' });
 
-// export default function App() {
-//   const [value, setValue] = useState(0);
+export default function App() {
+  const [value, setValue] = useState(0);
 
-//   const store = useRef(null);
+  const store = useRef(null);
 
-//   useEffect(() => {
-//     store.current = createStore(myReducer);
+  useEffect(() => {
+    store.current = createStore(myReducer);
 
-//     const unsubscribe = store.current.subscribe(() => {
-//       const { count } = store.current.getValue();
-//       console.log({ count });
-//       setValue(count);
+    const unsubscribe = store.current.subscribe(() => {
+      const { count } = store.current.getValue();
+      console.log({ count });
+      setValue(count);
 
-//       if (count === 11) {
-//         unsubscribe();
-//       }
-//     });
-//   }, []);
+      if (count === 11) {
+        unsubscribe();
+      }
+    });
+  }, []);
 
-//   const add = () => {
-//     store.current.dispatch({ type: 'add' });
-//   };
+  const add = () => {
+    store.current.dispatch({ type: 'add' });
+  };
 
-//   const subtract = () => {
-//     store.current.dispatch({ type: 'sub' });
-//   };
+  const subtract = () => {
+    store.current.dispatch({ type: 'sub' });
+  };
 
-//   return (
-//     <div>
-//       <h1>Count: {value}</h1>
-//       <button onClick={add}>Add</button>
-//       <button onClick={subtract}>Subtract</button>
-//     </div>
-//   );
-// }
+  return (
+    <div>
+      <h1>Count: {value}</h1>
+      <button onClick={add}>Add</button>
+      <button onClick={subtract}>Subtract</button>
+    </div>
+  );
+}
